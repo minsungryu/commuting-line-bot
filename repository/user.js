@@ -1,10 +1,18 @@
+exports.findAll = () => {
+    return {
+        name: 'find-user-all',
+        text: 'SELECT * FROM account WHERE deleted = false',
+        values: []
+    };
+};
+
 exports.findById = (userId) => {
     return {
         name: 'find-user-by-id',
         text: 'SELECT * FROM account WHERE user_id = $1 and deleted = false',
         values: [userId]
     };
-}
+};
 
 exports.findByAttendanceTime = (time) => {
     return {
@@ -12,7 +20,7 @@ exports.findByAttendanceTime = (time) => {
         text: 'SELECT * FROM account WHERE attendance_time = $1 and deleted = false',
         values: [time]
     };
-}
+};
 
 exports.findByLeaveTime = (time) => {
     return {
@@ -20,7 +28,7 @@ exports.findByLeaveTime = (time) => {
         text: 'SELECT * FROM account WHERE leave_time = $1 and deleted = false',
         values: [time]
     };
-}
+};
 
 exports.insertUser = (userId) => {
     return {
@@ -28,7 +36,7 @@ exports.insertUser = (userId) => {
         text: 'INSERT INTO account(user_id) VALUES($1)',
         values: [userId]
     };
-}
+};
 
 exports.activateUser = (userId) => {
     return {
@@ -36,7 +44,7 @@ exports.activateUser = (userId) => {
         text: 'UPDATE account SET deleted = false WHERE user_id = $1',
         values: [userId]
     };
-}
+};
 
 exports.deleteUser = (userId) => {
     return {
@@ -44,4 +52,4 @@ exports.deleteUser = (userId) => {
         text: 'UPDATE account SET deleted = true WHERE user_id = $1',
         values: [userId]
     };
-}
+};

@@ -8,7 +8,10 @@ const {
 } = require("../repository/user");
 
 exports.webhookHandler = (req, res) => {
+  const destination = req.body.destination;
   const events = req.body.events;
+
+  console.log(destination);
   console.log(events);
 
   const requests = events.map(({ type, source }) => {

@@ -1,4 +1,4 @@
-const { replyMessage } = require("../configuration/line.config");
+const { pushMessage, replyMessage } = require("../configuration/line.config");
 const { pool } = require("../configuration/database.config");
 const {
   findById,
@@ -14,7 +14,7 @@ exports.webhookHandler = (req, res) => {
   if (!destination) { // It means line-dev webhook test
     return res.sendStatus(200);
   }
-  
+
   console.log(events);
   const requests = events.map(({ type, source }) => {
     switch (type) {

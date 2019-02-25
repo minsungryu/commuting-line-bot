@@ -9,8 +9,8 @@ const {
 
 exports.webhookHandler = (req, res) => {
   const events = req.body.events;
+  console.log(events);
   const works = events.map(event => {
-    console.log(event);
     const { type, source } = event;
     switch (type) {
       case "follow":
@@ -22,6 +22,7 @@ exports.webhookHandler = (req, res) => {
     }
   });
 
+  console.log(works);
   Promise.all(works)
     .then(responses => {
       console.log(responses);

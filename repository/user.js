@@ -9,7 +9,7 @@ exports.findAll = () => {
 exports.findById = (userId) => {
     return {
         name: 'find-user-by-id',
-        text: 'SELECT * FROM account WHERE user_id = $1 and deleted = false',
+        text: 'SELECT * FROM account WHERE user_id = $1',
         values: [userId]
     };
 };

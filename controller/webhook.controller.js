@@ -32,7 +32,7 @@ function createFollowUser(source, res) {
     const userId = source.userId;
     pool.query(findById(userId))
         .then(result => {
-            const userQuery = result.rows.length ? activateUser: insertUser;
+            const userQuery = result.rows.length ? activateUser : insertUser;
             return pool.query(userQuery(userId)).then(result => greeting(userId));
         })
         .then(response => res.sendStatus(200))

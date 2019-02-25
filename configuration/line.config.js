@@ -7,17 +7,11 @@ const config = {
   channelSecret: env.LINE_CHANNEL_SECRET
 };
 
-const WEBHOOK_TEST_REPLY_TOKENS = new Set(['00000000000000000000000000000000', 'ffffffffffffffffffffffffffffffff']);
-const WEBHOOK_TEST_USER_ID = 'Udeadbeefdeadbeefdeadbeefdeadbeef';
 const REQUEST_THRESHOLD = 150;
 
 const client = new line.Client(config);
 
 function pushMessage(userId, text) {
-  if (WEBHOOK_TEST_USER_ID === userId) {
-    return Promise.resolve();
-  }
-  
   return client.pushMessage(userId, {
     type: "text",
     text: text
@@ -25,10 +19,6 @@ function pushMessage(userId, text) {
 };
 
 function replyMessage(replyToken, text) {
-  if (WEBHOOK_TEST_REPLY_TOKENS.has(replyToken)) {
-    return Promise.resolve();
-  }
-
   return client.replyMessage(replyToken, {
     type: "text",
     text: text

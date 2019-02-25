@@ -1,4 +1,4 @@
-const { pushMessage } = require("../configuration/line.config");
+const { replyMessage } = require("../configuration/line.config");
 const { pool } = require("../configuration/database.config");
 const {
   findById,
@@ -10,20 +10,19 @@ const {
 exports.webhookHandler = (req, res) => {
   const events = req.body.events;
   console.log(events);
-  const works = events.map(event => {
-    const { type, source } = event;
+
+  const requests = events.map(({ type, source }) => {
     switch (type) {
       case "follow":
-        return createFollowUser(source, res);
+        return createFollowUser(source);
       case "unfollow":
-        return deleteUnfollowUser(source, res);
+        return deleteUnfollowUser(source);
       case "message":
-        return replyMessage(source, res);
+        return alertNotSupportMessage(source);
     }
   });
 
-  console.log(works);
-  Promise.all(works)
+  Promise.all(requests)
     .then(responses => {
       console.log(responses);
       return res.sendStatus(200);
@@ -46,13 +45,13 @@ function createFollowUser(source) {
   });
 }
 
-function deleteUnfollowUser(source, res) {
+function deleteUnfollowUser(source) {
   const userId = source.userId;
   return pool.query(deleteUser(userId));
 }
 
-function replyMessage(source, res) {
-  return pushMessage(source.userId, "현재 대화기능은 제공하고 있지 않습니다");
+function alertNotSupportMessage(source) {
+  return replyMessage(source.replyToken, "현재 대화기능은 제공하고 있지 않습니다");
 }
 
 function greeting(userId) {

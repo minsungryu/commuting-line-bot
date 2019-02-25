@@ -8,7 +8,6 @@ const config = {
 };
 
 const REQUEST_THRESHOLD = 150;
-
 const client = new line.Client(config);
 
 function pushMessage(userId, text) {
@@ -16,7 +15,14 @@ function pushMessage(userId, text) {
     type: "text",
     text: text
   });
-}
+};
+
+function replyMessage(replyToken, text) {
+  return client.replyMessage(replyToken, {
+    type: "text",
+    text: text
+  });
+};
 
 function multicastMessage(userIds, text) {
   if (REQUEST_THRESHOLD < userIds.length) {
@@ -27,6 +33,12 @@ function multicastMessage(userIds, text) {
     type: "text",
     text: text
   });
-}
+};
 
-module.exports = { client, pushMessage, multicastMessage, REQUEST_THRESHOLD };
+module.exports = {
+  REQUEST_THRESHOLD,
+  client,
+  pushMessage,
+  replyMessage,
+  multicastMessage
+};

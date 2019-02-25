@@ -2,6 +2,10 @@ const { pushMessage } = require('../configuration/line.config');
 const { pool } = require('../configuration/database.config');
 const { findById, insertUser, activateUser, deleteUser } = require('../repository/user');
 
+exports.webhookHealth = (req, res) => {
+    res.sendStatus(200);
+};
+
 exports.webhookHandler = (req, res) => {
     const events = req.body.events;
     events.map(event => {
@@ -22,7 +26,7 @@ exports.webhookHandler = (req, res) => {
                 break;
         }
     });
-}
+};
 
 function createFollowUser(source, res) {
     if (source.type !== 'user') {

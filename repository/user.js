@@ -54,3 +54,7 @@ exports.deleteUser = userId => {
     values: [userId]
   };
 };
+
+exports.extractUserIds = (result) => {
+  return result.rows.map(user => user["user_id"]);
+}

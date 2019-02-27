@@ -1,10 +1,12 @@
-const { pushMessage, replyMessage } = require("../configuration/line.config");
+const { pushMessage, replyMessage, multicastUsers } = require("../configuration/line.config");
 const { pool } = require("../configuration/database.config");
 const {
+  findAll,
   findById,
   insertUser,
   activateUser,
-  deleteUser
+  deleteUser,
+  extractUserIds
 } = require("../repository/user");
 
 exports.webhookHandler = (req, res) => {
@@ -36,6 +38,44 @@ exports.webhookHandler = (req, res) => {
       console.error(errors);
       return res.sendStatus(500);
     });
+};
+
+exports.attendancePushHandler = (req, res) => {
+  pool
+      .query(findAll())
+      .then(result =>
+        multicastUsers(
+          extractUserIds(result),
+          "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
+        )
+      )
+      .then(responses => {
+        console.log("[FORCE] Attendance alarm succeed");
+        res.sendStatus(200);
+      })
+      .catch(err => {
+        console.error(err.stack);
+        res.sendStatus(500);
+      });
+};
+
+exports.leavePushHandler = (req, res) => {
+    pool
+      .query(findAll())
+      .then(result =>
+        multicastUsers(
+          extractUserIds(result),
+          "오늘 하루도 우아했나요? 퇴근하시기 전에 퇴근버튼 꾹! 잊지마세요~"
+        )
+      )
+      .then(responses => {
+        console.log("[FORCE] Leave alarm succeed");
+        res.sendStatus(200);
+      })
+      .catch(err => {
+        console.error(err.stack);
+        res.sendStatus(500);
+      });
 };
 
 function createFollowUser(source) {

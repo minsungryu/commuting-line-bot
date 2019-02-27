@@ -1,15 +1,13 @@
 const schedule = require("node-schedule");
 const moment = require("moment");
 
-const {
-  multicastMessage,
-  REQUEST_THRESHOLD
-} = require("../configuration/line.config");
+const { multicastUsers } = require("../configuration/line.config");
 const { pool } = require("../configuration/database.config");
 const {
   findAll,
   findByAttendanceTime,
-  findByLeaveTime
+  findByLeaveTime,
+  extractUserIds
 } = require("../repository/user");
 
 const TIME_FORMAT = "HH:mm";
@@ -68,27 +66,3 @@ exports.leaveJob = () => {
       .catch(err => console.error(err.stack));
   });
 };
-
-function extractUserIds(result) {
-  return result.rows.map(user => user["user_id"]);
-}
-
-function multicastUsers(userIds, text) {
-  if (userIds.length === 0) {
-    console.log("No user");
-    return;
-  }
-
-  const requests = [];
-  const maxTry = parseInt(userIds.length / REQUEST_THRESHOLD + 1);
-
-  for (let i = 0; i < maxTry; i++) {
-    const slice = userIds.slice(
-      i * REQUEST_THRESHOLD,
-      (i + 1) * REQUEST_THRESHOLD
-    );
-    requests.push(multicastMessage(slice, text));
-  }
-
-  return Promise.all(requests);
-}

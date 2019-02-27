@@ -36,10 +36,31 @@ function multicastMessage(userIds, text) {
   });
 };
 
+function multicastUsers(userIds, text) {
+  if (userIds.length === 0) {
+    console.log("No user");
+    return;
+  }
+
+  const requests = [];
+  const maxTry = parseInt(userIds.length / REQUEST_THRESHOLD + 1);
+
+  for (let i = 0; i < maxTry; i++) {
+    const slice = userIds.slice(
+      i * REQUEST_THRESHOLD,
+      (i + 1) * REQUEST_THRESHOLD
+    );
+    requests.push(multicastMessage(slice, text));
+  }
+
+  return Promise.all(requests);
+}
+
 module.exports = {
   REQUEST_THRESHOLD,
   client,
   pushMessage,
   replyMessage,
-  multicastMessage
+  multicastMessage,
+  multicastUsers
 };

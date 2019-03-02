@@ -13,11 +13,11 @@ exports.webhookHandler = (req, res) => {
   const destination = req.body.destination;
   const events = req.body.events;
 
+  console.log(destination, events);
   if (!destination) { // It means line-dev webhook test
     return res.sendStatus(200);
   }
 
-  console.log(events);
   const requests = events.map(({ type, source }) => {
     switch (type) {
       case "follow":

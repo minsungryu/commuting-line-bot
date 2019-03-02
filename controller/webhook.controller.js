@@ -96,7 +96,7 @@ function deleteUnfollowUser(source) {
 }
 
 function alertNotSupportMessage(source) {
-  return replyMessage(source.replyToken, "현재 대화기능은 제공하고 있지 않습니다");
+  return pushMessage(source.userId, "현재 대화기능은 제공하고 있지 않습니다");
 }
 
 function greeting(userId) {

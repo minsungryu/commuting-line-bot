@@ -23,52 +23,49 @@ exports.attendanceJob = () => {
   const ALARM_BEFORE = 10;
   // schedule.scheduleJob("50 12 * * 1", () => {
   schedule.scheduleJob("* * * * *", () => {
-    // pool
-    //   .query(findAll())
-    //   .then(result =>
+    pool
+      .query(findAll())
+      .then(result =>
         multicastUsers(
-          ['Ua282887c9230266442bca2d2d0033313'],
-          // extractUserIds(result),
+          extractUserIds(result),
           "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~1"
         )
-      // )
-      // .then(responses => console.log("Attendance alarm succeed"))
-      // .catch(err => console.error(err.stack));
+      )
+      .then(responses => console.log("Attendance alarm succeed"))
+      .catch(err => console.error(err.stack));
   });
 
   // schedule.scheduleJob("20,50 * * * 2-5", () => {
   schedule.scheduleJob("* * * * *", () => {
-    // const queryTime = moment()
-    //   .add(ALARM_BEFORE, "minutes")
-    //   .format(TIME_FORMAT);
-    // pool
-    //   .query(findByAttendanceTime(queryTime))
-    //   .then(result =>
+    const queryTime = moment()
+      .add(ALARM_BEFORE, "minutes")
+      .format(TIME_FORMAT);
+    pool
+      .query(findByAttendanceTime(queryTime))
+      .then(result =>
         multicastUsers(
-          ['Ua282887c9230266442bca2d2d0033313'],
-          // extractUserIds(result),
+          extractUserIds(result),
           "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~2"
         )
-      // )
-      // .then(responses => console.log("Attendance alarm succeed"))
-      // .catch(err => console.error(err.stack));
+      )
+      .then(responses => console.log("Attendance alarm succeed"))
+      .catch(err => console.error(err.stack));
   });
 };
 
 exports.leaveJob = () => {
   // schedule.scheduleJob("0,30 * * * 1-5", () => {
   schedule.scheduleJob("* * * * *", () => {
-    // const queryTime = moment().format(TIME_FORMAT);
-    // pool
-    //   .query(findByLeaveTime(queryTime))
-    //   .then(result =>
+    const queryTime = moment().format(TIME_FORMAT);
+    pool
+      .query(findByLeaveTime(queryTime))
+      .then(result =>
         multicastUsers(
-          ['Ua282887c9230266442bca2d2d0033313'],
-          // extractUserIds(result),
+          extractUserIds(result),
           "오늘 하루도 우아했나요? 퇴근하시기 전에 퇴근버튼 꾹! 잊지마세요~"
         )
-  //     )
-  //     .then(responses => console.log("Leave alarm succeed"))
-  //     .catch(err => console.error(err.stack));
+      )
+      .then(responses => console.log("Leave alarm succeed"))
+      .catch(err => console.error(err.stack));
   });
 };

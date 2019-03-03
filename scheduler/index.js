@@ -10,8 +10,16 @@ const {
   extractUserIds
 } = require("../repository/user");
 
+const legalHoliday = require("./legal_holiday.json")
+
+const DATE_FORMAT = "YYYY-MM-DD";
 const TIME_FORMAT = "HH:mm";
 
+const {
+  CRON_ATTENDANCE_MONDAY,
+  CRON_ATTENDANCE_WEEKDAY,
+  CRON_LEAVE_WEEKDAY
+} = process.env
 /**
  * 1. 공유일 확인(TODO)
  * 2. 해당 시간에 출근하는 사람 확인해서 대기열 추가(TODO: 휴가제외)
@@ -21,7 +29,12 @@ const TIME_FORMAT = "HH:mm";
  */
 exports.attendanceJob = () => {
   const ALARM_BEFORE = 10;
-  schedule.scheduleJob("50 12 * * 1", () => {
+  schedule.scheduleJob(CRON_ATTENDANCE_MONDAY, () => {
+    if (isLegalHoliday()) {
+      console.log("Today is holiday");
+      return;
+    }
+    
     pool
       .query(findAll())
       .then(result =>
@@ -34,7 +47,11 @@ exports.attendanceJob = () => {
       .catch(err => console.error(err.stack));
   });
 
-  schedule.scheduleJob("20,50 * * * 2-5", () => {
+  schedule.scheduleJob(CRON_ATTENDANCE_WEEKDAY, () => {
+    if (isLegalHoliday()) {
+      console.log("Today is holiday");
+      return;
+    }
     const queryTime = moment()
       .add(ALARM_BEFORE, "minutes")
       .format(TIME_FORMAT);
@@ -52,7 +69,12 @@ exports.attendanceJob = () => {
 };
 
 exports.leaveJob = () => {
-  schedule.scheduleJob("0,30 * * * 1-5", () => {
+  schedule.scheduleJob(CRON_LEAVE_WEEKDAY, () => {
+    if (isLegalHoliday()) {
+      console.log("Today is holiday");
+      return;
+    }
+
     const queryTime = moment().format(TIME_FORMAT);
     pool
       .query(findByLeaveTime(queryTime))
@@ -66,3 +88,8 @@ exports.leaveJob = () => {
       .catch(err => console.error(err.stack));
   });
 };
+
+function isLegalHoliday() {
+  const today = moment().format(DATE_FORMAT);
+  return legalHoliday.hasOwnProperty(today);
+}

@@ -21,8 +21,7 @@ const TIME_FORMAT = "HH:mm";
  */
 exports.attendanceJob = () => {
   const ALARM_BEFORE = 10;
-  // schedule.scheduleJob("50 12 * * 1", () => {
-  schedule.scheduleJob("* * * * *", () => {
+  schedule.scheduleJob("50 12 * * 1", () => {
     pool
       .query(findAll())
       .then(result =>
@@ -35,8 +34,7 @@ exports.attendanceJob = () => {
       .catch(err => console.error(err.stack));
   });
 
-  // schedule.scheduleJob("20,50 * * * 2-5", () => {
-  schedule.scheduleJob("* * * * *", () => {
+  schedule.scheduleJob("20,50 * * * 2-5", () => {
     const queryTime = moment()
       .add(ALARM_BEFORE, "minutes")
       .format(TIME_FORMAT);
@@ -54,8 +52,7 @@ exports.attendanceJob = () => {
 };
 
 exports.leaveJob = () => {
-  // schedule.scheduleJob("0,30 * * * 1-5", () => {
-  schedule.scheduleJob("* * * * *", () => {
+  schedule.scheduleJob("0,30 * * * 1-5", () => {
     const queryTime = moment().format(TIME_FORMAT);
     pool
       .query(findByLeaveTime(queryTime))

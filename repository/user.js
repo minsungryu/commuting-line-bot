@@ -57,4 +57,12 @@ exports.deleteUser = userId => {
 
 exports.extractUserIds = (result) => {
   return result.rows.map(user => user["user_id"]);
-}
+};
+
+exports.findAdmin = () => {
+  return {
+    name: "find-admin-user",
+    text: "SELECT * FROM account WHERE admin = $1",
+    values: [true]
+  };
+};

@@ -1,12 +1,13 @@
 const schedule = require("node-schedule");
 const moment = require("moment");
 
-const { multicastUsers } = require("../configuration/line.config");
+const { multicastUsers, pushMessage } = require("../configuration/line.config");
 const { pool } = require("../configuration/database.config");
 const {
   findAll,
   findByAttendanceTime,
   findByLeaveTime,
+  findAdmin,
   extractUserIds
 } = require("../repository/user");
 
@@ -20,6 +21,17 @@ const {
   CRON_ATTENDANCE_WEEKDAY,
   CRON_LEAVE_WEEKDAY
 } = process.env
+
+exports.healthCheck = () => {
+  schedule.scheduleJob("0 9,17 * * 1-5", () => {
+    pool
+      .query(findAdmin())
+      .then(result => pushMessage(result.rows[0]["user_id"], "status: ok"))
+      .then(responses => console.log("[SCHEDULER] Status: OK"))
+      .catch(err => console.error(err.stack));
+  });
+};
+
 /**
  * 1. 공유일 확인(TODO)
  * 2. 해당 시간에 출근하는 사람 확인해서 대기열 추가(TODO: 휴가제외)

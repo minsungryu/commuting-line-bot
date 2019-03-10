@@ -40,10 +40,10 @@ exports.attendanceJob = () => {
       .then(result =>
         multicastUsers(
           extractUserIds(result),
-          "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~1"
+          "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
         )
       )
-      .then(responses => console.log("Attendance alarm succeed"))
+      .then(responses => console.log("[SCHEDULER] Attendance alarm succeed"))
       .catch(err => console.error(err.stack));
   });
 
@@ -60,10 +60,10 @@ exports.attendanceJob = () => {
       .then(result =>
         multicastUsers(
           extractUserIds(result),
-          "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~2"
+          "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
         )
       )
-      .then(responses => console.log("Attendance alarm succeed"))
+      .then(responses => console.log("[SCHEDULER] Attendance alarm succeed"))
       .catch(err => console.error(err.stack));
   });
 };
@@ -84,7 +84,7 @@ exports.leaveJob = () => {
           "오늘 하루도 우아했나요? 퇴근하시기 전에 퇴근버튼 꾹! 잊지마세요~"
         )
       )
-      .then(responses => console.log("Leave alarm succeed"))
+      .then(responses => console.log("[SCHEDULER] Leave alarm succeed"))
       .catch(err => console.error(err.stack));
   });
 };

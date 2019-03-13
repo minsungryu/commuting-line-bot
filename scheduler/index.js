@@ -39,26 +39,28 @@ exports.healthCheck = () => {
  * 4. 150명씩(max support) 나눠서 메시지 전송
  * 5. 10분, 15분, 30분뒤 다시 알림(TODO)
  */
-exports.attendanceJob = () => {
-  const ALARM_BEFORE = 10;
+exports.modayAttendanceJob = () => {
   schedule.scheduleJob(CRON_ATTENDANCE_MONDAY, () => {
     if (isLegalHoliday()) {
       console.log("Today is holiday");
       return;
     }
-    
-    pool
-      .query(findAll())
-      .then(result =>
-        multicastUsers(
-          extractUserIds(result),
-          "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
-        )
-      )
-      .then(responses => console.log("[SCHEDULER] Attendance alarm succeed"))
-      .catch(err => console.error(err.stack));
-  });
 
+    pool
+    .query(findAll())
+    .then(result =>
+        multicastUsers(
+            extractUserIds(result),
+            "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
+        )
+    )
+    .then(responses => console.log("[SCHEDULER] Monday attendance alarm succeed"))
+    .catch(err => console.error(err.stack));
+  });
+};
+
+exports.weekdayAttendanceJob = () => {
+  const ALARM_BEFORE = 10;
   schedule.scheduleJob(CRON_ATTENDANCE_WEEKDAY, () => {
     if (isLegalHoliday()) {
       console.log("Today is holiday");
@@ -75,7 +77,7 @@ exports.attendanceJob = () => {
           "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
         )
       )
-      .then(responses => console.log("[SCHEDULER] Attendance alarm succeed"))
+      .then(responses => console.log("[SCHEDULER] Weekday attendance alarm succeed"))
       .catch(err => console.error(err.stack));
   });
 };

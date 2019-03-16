@@ -38,7 +38,7 @@ function multicastMessage(userIds, text) {
 
 function multicastUsers(userIds, text) {
   if (userIds.length === 0) {
-    console.log("No user");
+    console.log("[LINE API] No user");
     return;
   }
 

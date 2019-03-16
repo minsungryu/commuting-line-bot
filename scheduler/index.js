@@ -27,7 +27,7 @@ exports.healthCheck = () => {
     pool
       .query(findAdmin())
       .then(result => pushMessage(result.rows[0]["user_id"], "status: ok"))
-      .then(responses => console.log("[SCHEDULER] Status: OK"))
+      .then(responses => console.log(moment(), "[SCHEDULER] Status: OK"))
       .catch(err => console.error(err.stack));
   });
 };
@@ -46,6 +46,7 @@ exports.modayAttendanceJob = () => {
       return;
     }
 
+    console.log(moment(), "[SCHEDULER] Monday attendance alarm start");
     pool
     .query(findAll())
     .then(result =>
@@ -54,7 +55,7 @@ exports.modayAttendanceJob = () => {
             "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
         )
     )
-    .then(responses => console.log("[SCHEDULER] Monday attendance alarm succeed"))
+    .then(responses => console.log(moment(), "[SCHEDULER] Monday attendance alarm finished"))
     .catch(err => console.error(err.stack));
   });
 };
@@ -66,6 +67,8 @@ exports.weekdayAttendanceJob = () => {
       console.log("Today is holiday");
       return;
     }
+
+    console.log(moment(), "[SCHEDULER] Weekday attendance alarm start");
     const queryTime = moment()
       .add(ALARM_BEFORE, "minutes")
       .format(TIME_FORMAT);
@@ -77,7 +80,7 @@ exports.weekdayAttendanceJob = () => {
           "췍! 출근하셨다면 출근버튼을 꼭 눌러주세요~"
         )
       )
-      .then(responses => console.log("[SCHEDULER] Weekday attendance alarm succeed"))
+      .then(responses => console.log(moment(), "[SCHEDULER] Weekday attendance alarm finished"))
       .catch(err => console.error(err.stack));
   });
 };
@@ -89,6 +92,7 @@ exports.leaveJob = () => {
       return;
     }
 
+    console.log(moment(), "[SCHEDULER] Leave alarm start");
     const queryTime = moment().format(TIME_FORMAT);
     pool
       .query(findByLeaveTime(queryTime))
@@ -98,7 +102,7 @@ exports.leaveJob = () => {
           "오늘 하루도 우아했나요? 퇴근하시기 전에 퇴근버튼 꾹! 잊지마세요~"
         )
       )
-      .then(responses => console.log("[SCHEDULER] Leave alarm succeed"))
+      .then(responses => console.log(moment(), "[SCHEDULER] Leave alarm finished"))
       .catch(err => console.error(err.stack));
   });
 };
